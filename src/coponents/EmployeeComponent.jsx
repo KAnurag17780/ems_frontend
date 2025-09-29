@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { createEmployee } from '../services/EmployeeService'
+import React, { useEffect, useState } from 'react'
+import { createEmployee, getEmployee } from '../services/EmployeeService'
 import {useNavigate , useParams} from 'react-router-dom'
 
 
@@ -17,8 +17,18 @@ const EmployeeComponent = () => {
         email : ''
     })
 
-   
     const navigate = useNavigate();
+
+    useEffect(() => {
+  getEmployee(id).then((response) => {
+    setFirstName(response.data.firstName);
+    setLastName(response.data.lastName);
+    setEmail(response.data.email);
+  }).catch(error => console.error(error));
+}, [id]);   // ✅ should depend on id
+
+
+
     function saveEmployee(e)
     {
         e.preventDefault(); // prevents refreshing of page 
